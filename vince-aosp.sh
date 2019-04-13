@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Copyright (C) 2019 Dhimas Bagus Prayoga (kry9ton)
 # Copyright (C) 2018 Abubakar Yagob (blacksuan19)
 # Copyright (C) 2018 Rama Bondan Prakoso (rama982)
 # SPDX-License-Identifier: GPL-3.0-or-later
@@ -16,20 +17,55 @@ CONFIG=vince-krypton_defconfig
 CORES=$(grep -c ^processor /proc/cpuinfo)
 THREAD="-j$CORES"
 CROSS_COMPILE+="ccache "
-CROSS_COMPILE+="$PWD/stock/bin/aarch64-linux-android-"
+CROSS_COMPILE+="$PWD/stock/bin/aarch64-linux-gnu-"
 
+
+#Telergam Variable
 KERNEL_NAME="KryPtoN"
 CODE="PWR"
+VERSION="v1.0"
+KVERSION="4.9.166"
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 BOT_API_KEY="715801700:AAEnlXgl0p8V5f8xHefHC2SLq8kio6VcS-c"
 CHAT_ID="-1001348632957"
 ZIP_NAME="${KERNEL_NAME}-${CODE}-$(date "+%Y%m%d-%H%M").zip"
+COMPILE="$PWD/stock/bin/aarch64-linux-gnu-"
+COMP_VERSION=$(${COMPILE}gcc --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')
+
+#Telegram Function
+                function kirim() {
+                         curl -F chat_id="$CHAT_ID" -F document=@"$ZIP_DIR/$ZIP_NAME" https://api.telegram.org/bot$BOT_API_KEY/sendDocument
+                }
+
+                function kirim_info() {
+                        curl -s "https://api.telegram.org/bot$BOT_API_KEY/sendMessage" \
+				-d "parse_mode=markdown" \
+				-d text="${1}" \
+				-d chat_id="$CHAT_ID" \
+				-d "disable_web_page_preview=true"
+                }
+
+                function error() {
+                        kirim_info "$(echo -e "Buld Failed, Check log for more info")"
+                         exit 1
+                }
+
+		function kirimsetiker() {
+			curl -s -F chat_id="$CHAT_ID" -F sticker="CAADBQADBgADZMYlHVmIXcRlbUt_Ag" https://api.telegram.org/bot$BOT_API_KEY/sendSticker
+		}
+
+		function selesai() {
+			kirim_info "$(echo -e "Build Finished in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.")"
+		}
+
+                
 
 # Export
 export ARCH=arm64
 export SUBARCH=arm64
 export PATH=/usr/lib/ccache:$PATH
 export CROSS_COMPILE
+
 
 # Is this logo
 echo -e "---------------------------------------------------------------------";
@@ -59,7 +95,10 @@ while true; do
 		git clone https://github.com/Kry9toN/ak2-KryPtoN
 	
 		echo -e "\n(i) Cloning toolcahins if folder not exist..."
-		git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-9.0.0_r33 --depth=1 stock 
+		git clone https://github.com/najahiiii/aarch64-linux-gnu.git -b gcc9-20190401 --depth=1 stock
+
+		echo -e "\n(i) Cloning clang if folder not exist..."
+		git lfs clone https://github.com/najahiiii/DragonTC.git -b 9.0 --depth=1 clang
 	
 		echo -e ""
 		make  O=out $CONFIG $THREAD &>/dev/null
@@ -148,7 +187,10 @@ while true; do
 		git clone https://github.com/Kry9toN/ak2-KryPtoN
 	
 		echo -e "\n(i) Cloning toolcahins if folder not exist..."
-		git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-9.0.0_r33 --depth=1 stock 
+		git clone https://github.com/najahiiii/aarch64-linux-gnu.git -b linaro8-20190402 --depth=1 stock
+
+		echo -e "\n(i) Cloning clang if folder not exist..."
+		git lfs clone https://github.com/najahiiii/DragonTC.git -b 9.0 --depth=1 clang
 	
 		echo -e ""
 		make  O=out $CONFIG $THREAD &>/dev/null
@@ -186,6 +228,7 @@ while true; do
 		DIFF=$(($BUILD_END - $BUILD_START))
 
 		echo -e "\n(i) Image-dtb compiled successfully."
+		echo -e "#######################################################################"
                 echo -e " "
 
 		cd $ZIP_DIR
@@ -196,33 +239,11 @@ while true; do
 
 		echo -e "(i) Flashable zip generated under $ZIP_DIR."
 
-                echo -e " "
+                echo -e " "              
 
-                echo -e "Send to Telegram"               
 
-                function kirim() {
-                         curl -F chat_id="$CHAT_ID" -F document=@"$ZIP_DIR/$ZIP_NAME" https://api.telegram.org/bot$BOT_API_KEY/sendDocument
-                }
-
-                function kirim_info() {
-                        curl -s "https://api.telgram.org/bot$BOT_API_KEY/sendMessage" \
-                                 -d "parse_mode=markdown" \
-                                 -d text="${1}"
-                                 -d chat_id="$CHAT_ID" \
-                                 -d "disable_web_page_preview=true"
-                }
-
-                function error() {
-                        kirim_info "$(echo -e "Buld Failed, Check log for more info")"
-                         exit 1
-                }
-
-		function selesai() {
-			kirim_info "$(echo "Build Finished in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.")"
-		}
-
-                
                 echo -e "Clean Kernel source"
+		echo -e " "
 
 		make O=out clean &>/dev/null
 		make mrproper &>/dev/null
@@ -232,14 +253,20 @@ while true; do
                 echo -e " "
                 echo -e "#######################################################################"
 
+		echo -e "(i) Total time elapsed: $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds."
 
 		echo -e "#######################################################################"
+		echo -e " "
+                echo -e "Send to Telegram" 
 
-                kirim_info "*KryPtoN* Kernel New Build!
-                *Started on:* ${KBULD_BUILD_HOST}
-		*At branch:* ${BRANCH}
-		*Commit:* $(git log --pretty=format:'%h : %s' -1)
-		*Strated on:* $(date)  "
+		kirim_info "*KryPtoN* Kernel New Build!
+*Started on:* Kali GNU/Linux Rolling
+*Kernel Version:* ${KVERSION}
+*Version:* ${VERSION}
+*At branch:* ${BRANCH}
+*Commit:* $(git log --pretty=format:'%h : %s' -1)
+*Compiler:* ${COMP_VERSION}
+*Strated on:* $(date)  "
 		kirim
 		selesai
 
