@@ -46,7 +46,7 @@ COMP_VERSION=$(${COMPILE}gcc --version | head -n 1 | perl -pe 's/\(http.*?\)//gs
                 }
 
                 function error() {
-                        kirim_info "$(echo -e "Buld Failed, Check log for more info")"
+                        kirim_info "$(echo -e "Build Failed, Check log for more info")"
                          exit 1
                 }
 
@@ -269,6 +269,7 @@ while true; do
 *Strated on:* $(date)  "
 		kirim
 		selesai
+		kirimsetiker
 
 fi
 	
