@@ -27,7 +27,7 @@ function sendinfo() {
                         -d chat_id=$chat_id \
                         -d "disable_web_page_preview=true" \
                         -d "parse_mode=html" \
-                        -d text="<b>KryPtoN Kernel</b> new build is up%0AStarted on <code>SemaphoreCI</code>%0AFor device <b>Vince</b> (Redmi 5 Plus AOSP)%0Abranch <code>$(git rev-parse --abbrev-ref HEAD)</code> (Android 9.0/Pie)%0AUnder commit <code>$(git log --pretty=format:'"%h : %s"' -1)</code>%0AUsing compiler: <code>$(${GCC}gcc --version | head -n 1)</code>%0AStarted on <code>$(TZ=Asia/Jakarta date)</code>%0A<b>SemaphoreCI Status</b> <a href='https://android_kernel_xiaomi_msm8953-4.9.semaphoreci.com/workflows/${SEMAPHORE_WORKFLOW_ID}'>here</a>%0A<b>Build Status:</b> #untested"
+                        -d text="<b>KryPtoN Kernel</b> new build is up%0AStarted on <code>SemaphoreCI</code>%0AFor device <b>Vince</b> (Redmi 5 Plus AOSP)%0Abranch <code>$(git rev-parse --abbrev-ref HEAD)</code> (Android 9.0/Pie)%0AUnder commit <code>$(git log --pretty=format:'"%h : %s"' -1)</code>%0AUsing compiler: <code>$(${GCC}gcc --version | head -n 1)</code>%0AStarted on <code>$(TZ=Asia/Jakarta date)</code>%0A<b>SemaphoreCI Status</b> <a href='https://android_kernel_xiaomi_msm8953-4.9.semaphoreci.com/workflows/${SEMAPHORE_WORKFLOW_ID}'>here</a>"
 }
 # Send private info
 function sendpriv() {
