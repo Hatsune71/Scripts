@@ -2,7 +2,7 @@
 IMAGE=$(pwd)/out/arch/arm64/boot/Image.gz-dtb
 echo "Cloning Toolchain, and AnyKernel"
 git clone --quiet -j32 https://github.com/Kry9toN/ak2-KryPtoN -b aosp AnyKernel
-git clone --quiet -j32 https://github.com/najahiii/aarch64-linux-gnu -b gcc10 gcc
+git clone --quiet -j32 https://github.com/Kry9toN-Project/aarch64-linux-gnu -b gcc10 gcc
 echo "Done"
 token="715801700:AAEnlXgl0p8V5f8xHefHC2SLq8kio6VcS-c"
 chat_id="-1001348632957"
