@@ -1,31 +1,42 @@
 #!bin/bash
 IMAGE=$(pwd)/out/arch/arm64/boot/Image.gz-dtb
 echo "Cloning Toolchain, and AnyKernel"
-git clone --quiet -j32 https://github.com/najahiiii/AnyKernel.git AnyKernel
-git clone --quiet -j32 https://github.com/najahiiii/aarch64-linux-gnu.git -b gcc9-20190401 gcc
+git clone --quiet -j32 https://github.com/Kry9toN/ak2-KryPtoN -b aosp AnyKernel
+git clone --quiet -j32 https://github.com/najahiii/aarch64-linux-gnu -b gcc10 gcc
 echo "Done"
-GCC="$(pwd)/gcc/bin/aarch64-linux-android-"
-curl -s -F chat_id=$chat_id -F sticker="CAADBQAD7wADQxCzIs_rqaRTwvagAg" https://api.telegram.org/bot$token/sendSticker
-curl -s -X POST https://api.telegram.org/bot$token/sendMessage?chat_id=$chat_id -d "disable_web_page_preview=true" -d "parse_mode=html&text=<b>KryPtoN Kernel</b> new build is up"'!'"%0AStarted on <code>CircleCI</code>%0AFor device <b>Vince</b> (Redmi 5 Plus)%0Abranch <code>$(git rev-parse --abbrev-ref HEAD)</code>%0AUnder commit <code>$(git log --pretty=format:'"%h : %s"' -1)</code>%0ACompiler <code>$(${GCC}gcc --version | head -n 1)</code>%0AStarted on <code>$(TZ=Asia/Jakarta date)</code>%0A<b>Build Status:</b> #untested"
+GCC="$(pwd)/gcc/bin/aarch64-linux-gnu-"
+curl -s -X POST https://api.telegram.org/bot$token/sendMessage?chat_id=$chat_id -d "disable_web_page_preview=true" -d "parse_mode=html&text=<b>KryPtoN Kernel</b> new build is up"'!'"%0AStarted on <code>CircleCI</code>%0AFor device <b>Vince</b> (Redmi 5 Plus AOSP)%0Abranch <code>$(git rev-parse --abbrev-ref HEAD)</code>%0AUnder commit <code>$(git log --pretty=format:'"%h : %s"' -1)</code>%0ACompiler <code>$(${GCC}gcc --version | head -n 1)</code>%0AStarted on <code>$(TZ=Asia/Jakarta date)</code>%0A<b>Build Status:</b> #untested"
 tanggal=$(TZ=Asia/Jakarta date +'%H%M-%d%m%y')
+token="715801700:AAEnlXgl0p8V5f8xHefHC2SLq8kio6VcS-c"
+chat_id="-1001348632957"
 START=$(date +"%s")
 export ARCH=arm64
 export KBUILD_BUILD_USER=KryPtoN
 export KBUILD_BUILD_HOST=CircleCI
 # Push kernel to channel
 function push() {
-	ZIP=$(echo Chips*.zip)
+	ZIP=$(echo KryPtoN*.zip)
 	curl -F document=@$ZIP "https://api.telegram.org/bot$token/sendDocument" \
 			-F chat_id="$chat_id" \
 			-F "disable_web_page_preview=true" \
 			-F "parse_mode=html" \
-			-F caption="Build took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s). | <b>Build logs</b> <a href='${HASIL}'>here</a> | #unified"
+			-F caption="Build took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s)."
 }
-# Function upload logs to my own server paste
+
 function paste() {
-    cat build.log | curl -F 'chips=<-' http://142.93.125.135 > link
-    HASIL="$(cat link)"
+    curl -F document=build.log "https://api.telegram.org/bot$token/sendDocument" \
+			-F chat_id="$chat_id" \
+			-F "disable_web_page_preview=true" \
+			-F "parse_mode=html" 
 }
+# Stiker
+function stiker() {
+	curl -s -F chat_id=$chat_id -F sticker="CAADBQADBgADZMYlHVmIXcRlbUt_Ag" https://api.telegram.org/bot$token/sendSticker
+	}
+# Stiker Error
+function stikerr() {
+	curl -s -F chat_id=$chat_id -F sticker="CAADBQADzwIAAnBaORAiq8ke6PAt0wI" https://api.telegram.org/bot$token/sendSticker
+	}
 # Fin Error
 function finerr() {
         paste
@@ -33,19 +44,21 @@ function finerr() {
 			-d chat_id="$chat_id" \
 			-d "disable_web_page_preview=true" \
 			-d "parse_mode=markdown" \
-			-d text="Build throw an error(s) | **Build logs** [here](${HASIL})"
+			-d text="Build throw an error(s)"
         exit 1
 }
-make -s -C $(pwd) O=out rolex_defconfig
+make -s -C $(pwd) O=out vince-krypton_defconfig
 make -C $(pwd) CROSS_COMPILE=${GCC} O=out -j32 -l32 2>&1| tee build.log
 if ! [ -a $IMAGE ]; then
 	finerr
+	stikerr
 	exit 1
 fi
 cp out/arch/arm64/boot/Image.gz-dtb AnyKernel/zImage
 paste
 cd AnyKernel
-zip -r9 KryPtoN-Pie-${tanggal}.zip *
+zip -r9 KryPtoN-Kernel-${tanggal}.zip *
 END=$(date +"%s")
 DIFF=$(($END - $START))
 push
+stiker
