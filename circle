@@ -4,11 +4,11 @@ echo "Cloning Toolchain, and AnyKernel"
 git clone --quiet -j32 https://github.com/Kry9toN/ak2-KryPtoN -b aosp AnyKernel
 git clone --quiet -j32 https://github.com/najahiii/aarch64-linux-gnu -b gcc10 gcc
 echo "Done"
-GCC="$(pwd)/gcc/bin/aarch64-linux-gnu-"
-curl -s -X POST https://api.telegram.org/bot$token/sendMessage?chat_id=$chat_id -d "disable_web_page_preview=true" -d "parse_mode=html&text=<b>KryPtoN Kernel</b> new build is up"'!'"%0AStarted on <code>CircleCI</code>%0AFor device <b>Vince</b> (Redmi 5 Plus AOSP)%0Abranch <code>$(git rev-parse --abbrev-ref HEAD)</code>%0AUnder commit <code>$(git log --pretty=format:'"%h : %s"' -1)</code>%0ACompiler <code>$(${GCC}gcc --version | head -n 1)</code>%0AStarted on <code>$(TZ=Asia/Jakarta date)</code>%0A<b>Build Status:</b> #untested"
-tanggal=$(TZ=Asia/Jakarta date +'%H%M-%d%m%y')
 token="715801700:AAEnlXgl0p8V5f8xHefHC2SLq8kio6VcS-c"
 chat_id="-1001348632957"
+GCC="$(pwd)/gcc/bin/aarch64-linux-gnu-"
+curl -s -X POST https://api.telegram.org/bot$token/sendMessage?chat_id=$chat_id -d "disable_web_page_preview=true" -d "parse_mode=html&text=<b>KryPtoN Kernel</b> new build is up"'!'"%0AStarted on <code>CircleCI</code>%0AFor device <b>Vince</b> (Redmi 5 Plus AOSP)%0Abranch <code>$(git rev-parse --abbrev-ref HEAD)</code>%0AUnder commit <code>$(git log --pretty=format:'"%h : %s"' -1)</code>%0ACompiler <code>$(${GCC}gcc --version | head -n 1)</code>%0AStarted on <code>$(TZ=Asia/Jakarta date)</code>%0A"
+tanggal=$(TZ=Asia/Jakarta date +'%H%M-%d%m%y')
 START=$(date +"%s")
 export ARCH=arm64
 export KBUILD_BUILD_USER=KryPtoN
