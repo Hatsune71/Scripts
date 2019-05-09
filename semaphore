@@ -74,10 +74,10 @@ function zipping() {
         zip -r9 KryPtoN-Kernel-${tanggal}.zip *
         cd ..
 }
-#sticker
 sendinfo
 compile
 zipping
 END=$(date +"%s")
 DIFF=$(($END - $START))
 push
+sticker
