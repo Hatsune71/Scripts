@@ -29,14 +29,6 @@ function sendinfo() {
                         -d "parse_mode=html" \
                         -d text="<b>KryPtoN Kernel</b> new build is up%0AStarted on <code>SemaphoreCI</code>%0AFor device <b>Vince</b> (Redmi 5 Plus AOSP)%0Abranch <code>$(git rev-parse --abbrev-ref HEAD)</code> (Android 9.0/Pie)%0AUnder commit <code>$(git log --pretty=format:'"%h : %s"' -1)</code>%0AUsing compiler: <code>$(${GCC}gcc --version | head -n 1)</code>%0AStarted on <code>$(TZ=Asia/Jakarta date)</code>%0A<b>SemaphoreCI Status</b> <a href='https://android_kernel_xiaomi_msm8953-4.9.semaphoreci.com/workflows/${SEMAPHORE_WORKFLOW_ID}'>here</a>"
 }
-# Send private info
-function sendpriv() {
-        curl -s -X POST "https://api.telegram.org/bot$token/sendMessage" \
-                        -d chat_id=@Kry9toN \
-                        -d "disable_web_page_preview=true" \
-                        -d "parse_mode=html" \
-                        -d text="KryPtoN CI Started%0AJob Name: ${SEMAPHORE_JOB_NAME}%0A<b>Pipeline jobs</b> <a href='https://android_kernel_xiaomi_msm8953-4.9.semaphoreci.com/jobs/${SEMAPHORE_JOB_ID}'>here</a>"
-}
 # Push kernel to channel
 function push() {
         cd AnyKernel
@@ -81,7 +73,6 @@ function zipping() {
         zip -r9 KryPtoN-Kernel-${tanggal}.zip *
         cd ..
 }
-sendpriv
 #sticker
 sendinfo
 compile
