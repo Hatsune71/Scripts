@@ -7,8 +7,16 @@ echo "Done"
 token="715801700:AAEnlXgl0p8V5f8xHefHC2SLq8kio6VcS-c"
 chat_id="-1001348632957"
 GCC="$(pwd)/gcc/bin/aarch64-linux-gnu-"
-tanggal=$(TZ=Asia/Jakarta date +'%H%M-%d%m%y')
+tanggal=$(date "+%Y%m%d-%H%M")
 START=$(date +"%s")
+# Modules environtment
+OUTDIR="$PWD/out/"
+SRCDIR="$PWD/"
+MODULEDIR="$PWD/AnyKernel/modules/system/lib/modules/"
+PRONTO=${MODULEDIR}pronto/pronto_wlan.ko
+STRIP="$PWD/stock/bin/$(echo "$(find "$PWD/stock/bin" -type f -name "aarch64-*-gcc")" | awk -F '/' '{print $NF}' |\
+			sed -e 's/gcc/strip/')"
+
 export ARCH=arm64
 export KBUILD_BUILD_USER=root
 export KBUILD_BUILD_HOST=KryPtoNProject
@@ -74,8 +82,28 @@ function zipping() {
         zip -r9 KryPtoN-Kernel-${tanggal}.zip *
         cd ..
 }
+# Module
+function module() {
+		cd AnyKernel
+		make clean &>/dev/null
+		cd ..
+	
+		for MOD in $(find "${OUTDIR}" -name '*.ko') ; do
+			"${STRIP}" --strip-unneeded --strip-debug "${MOD}" &> /dev/null
+			"${SRCDIR}"/scripts/sign-file sha512 \
+					"${OUTDIR}/signing_key.priv" \
+					"${OUTDIR}/signing_key.x509" \
+					"${MOD}"
+			find "${OUTDIR}" -name '*.ko' -exec cp {} "${MODULEDIR}" \;
+			case ${MOD} in
+				*/wlan.ko)
+					cp -ar "${MOD}" "${PRONTO}"
+			esac
+		done
+}
 sendinfo
 compile
+module
 zipping
 END=$(date +"%s")
 DIFF=$(($END - $START))
