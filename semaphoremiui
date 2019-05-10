@@ -1,8 +1,8 @@
 #!bin/bash
 IMAGE=$(pwd)/out/arch/arm64/boot/Image.gz-dtb
 echo "Clone Toolchains"
-git clone -j32 https://github.com/Kry9toN-project/aarch64-linux-gnu.git -b gcc10 gcc
-git clone -j32 https://github.com/Kry9toN/ak2-KryPtoN -b aosp AnyKernel
+git clone -j32 clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 --depth=1 gcc
+git clone -j32 https://github.com/Kry9toN/ak2-KryPtoN -b miui AnyKernel
 echo "Done"
 token="715801700:AAEnlXgl0p8V5f8xHefHC2SLq8kio6VcS-c"
 chat_id="-1001348632957"
@@ -10,7 +10,7 @@ GCC="$(pwd)/gcc/bin/aarch64-linux-gnu-"
 tanggal=$(TZ=Asia/Jakarta date +'%H%M-%d%m%y')
 START=$(date +"%s")
 export ARCH=arm64
-export KBUILD_BUILD_USER=KryPtoN
+export KBUILD_BUILD_USER=root
 export KBUILD_BUILD_HOST=KryPtoNProject
 # sticker plox
 function sticker() {
@@ -28,7 +28,7 @@ function sendinfo() {
                         -d chat_id=$chat_id \
                         -d "disable_web_page_preview=true" \
                         -d "parse_mode=html" \
-                        -d text="<b>KryPtoN Kernel</b> new build is up%0AStarted on <code>SemaphoreCI</code>%0AFor device <b>Vince</b> (Redmi 5 Plus AOSP)%0Abranch <code>$(git rev-parse --abbrev-ref HEAD)</code> (Android 9.0/Pie)%0AUnder commit <code>$(git log --pretty=format:'"%h : %s"' -1)</code>%0AUsing compiler: <code>$(${GCC}gcc --version | head -n 1)</code>%0AStarted on <code>$(TZ=Asia/Jakarta date)</code>%0A<b>SemaphoreCI Status</b> <a href='https://android_kernel_xiaomi_msm8953-4.9.semaphoreci.com/workflows/${SEMAPHORE_WORKFLOW_ID}'>here</a>"
+                        -d text="<b>KryPtoN Kernel MIUI</b> new build is up%0AStarted on <code>SemaphoreCI</code>%0AFor device <b>Vince</b> (Redmi 5 Plus)%0Abranch <code>$(git rev-parse --abbrev-ref HEAD)</code> (Android 9.0/Pie)%0AUnder commit <code>$(git log --pretty=format:'"%h : %s"' -1)</code>%0AUsing compiler: <code>$(${GCC}gcc --version | head -n 1)</code>%0AStarted on <code>$(TZ=Asia/Jakarta date)</code>%0A<b>SemaphoreCI Status</b> <a href='https://android_kernel_xiaomi_msm8953-4.9.semaphoreci.com/workflows/${SEMAPHORE_WORKFLOW_ID}'>here</a>"
 }
 # Push kernel to channel
 function push() {
