@@ -10,14 +10,6 @@ GCC="$(pwd)/gcc/bin/aarch64-linux-android-"
 tanggal=$(TZ=Asia/Jakarta date "+%Y%m%d-%H%M")
 START=$(date +"%s")
 
-# Modules environtment
-OUTDIR="$PWD/out/"
-SRCDIR="$PWD/"
-MODULEDIR="$PWD/AnyKernel/modules/system/lib/modules/"
-PRONTO=${MODULEDIR}pronto/pronto_wlan.ko
-STRIP="$PWD/gcc/bin/$(echo "$(find "$PWD/gcc/bin" -type f -name "aarch64-*-gcc")" | awk -F '/' '{print $NF}' |\
-			sed -e 's/gcc/strip/')"
-
 export ARCH=arm64
 export KBUILD_BUILD_USER=root
 export KBUILD_BUILD_HOST=KryPtoNProject
@@ -83,6 +75,15 @@ function zipping() {
         zip -r9 KryPtoN-Kernel-${tanggal}.zip *
         cd ..
 }
+
+# Modules environtment
+OUTDIR="$PWD/out/"
+SRCDIR="$PWD/"
+MODULEDIR="$PWD/AnyKernel/modules/system/lib/modules/"
+PRONTO=${MODULEDIR}pronto/pronto_wlan.ko
+STRIP="$PWD/gcc/bin/$(echo "$(find "$PWD/gcc/bin" -type f -name "aarch64-*-gcc")" | awk -F '/' '{print $NF}' |\
+			sed -e 's/gcc/strip/')"
+
 # Module
 function module() {
 		cd AnyKernel
