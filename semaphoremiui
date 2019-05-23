@@ -67,15 +67,15 @@ function finerr() {
 }
 # Compile plox
 function compile() {
-        make -s -C $(pwd) O=out vince-krypton_defconfig
-        make -s -C $(pwd) CROSS_COMPILE=${GCC} O=out -j32 -l32 2>&1| tee build.log
-            if ! [ -a $IMAGE ]; then
-                finerr
-		stikerr
-                exit 1
-            fi
-        cp out/arch/arm64/boot/Image.gz-dtb AnyKernel/zImage
-        paste
+	make -s -C $(pwd) O=out vince-krypton_defconfig
+	make -s -C $(pwd) CROSS_COMPILE=${GCC} O=out -j32 -l32 2>&1| tee build.log
+		if ! [ -a $IMAGE ]; then
+			finerr
+			stikerr
+			exit 1
+		fi
+	cp out/arch/arm64/boot/Image.gz-dtb AnyKernel/zImage
+	paste
 }
 # Zipping
 function zipping() {
