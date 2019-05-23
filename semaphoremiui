@@ -6,7 +6,7 @@ git clone -j32 https://github.com/Kry9toN/ak2-KryPtoN -b miui AnyKernel
 echo "Done"
 token="715801700:AAEnlXgl0p8V5f8xHefHC2SLq8kio6VcS-c"
 chat_id="-1001348632957"
-GCC="$(pwd)/gcc/bin/aarch64-linux-gnu-"
+GCC="$(pwd)/gcc/bin/aarch64-linux-android-"
 tanggal=$(TZ=Asia/Jakarta date "+%Y%m%d-%H%M")
 START=$(date +"%s")
 # Modules environtment
@@ -14,7 +14,7 @@ OUTDIR="$PWD/out/"
 SRCDIR="$PWD/"
 MODULEDIR="$PWD/AnyKernel/modules/system/lib/modules/"
 PRONTO=${MODULEDIR}pronto/pronto_wlan.ko
-STRIP="$PWD/stock/bin/$(echo "$(find "$PWD/stock/bin" -type f -name "aarch64-*-gcc")" | awk -F '/' '{print $NF}' |\
+STRIP="$PWD/gcc/bin/$(echo "$(find "$PWD/gcc/bin" -type f -name "aarch64-*-gcc")" | awk -F '/' '{print $NF}' |\
 			sed -e 's/gcc/strip/')"
 
 export ARCH=arm64
