@@ -1,6 +1,6 @@
 #!bin/bash
 echo "Clone Toolchains"
-git clone -j32 https://github.com/najahiiii/aarch64-linux-gnu.git -b 4.9-mirror gcc
+git clone -j32 https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-9.0.0_r34 gcc
 git clone -j32 https://github.com/Kry9toN/ak2-KryPtoN -b miui AnyKernel
 echo "Done"
 token="715801700:AAEnlXgl0p8V5f8xHefHC2SLq8kio6VcS-c"
@@ -18,7 +18,7 @@ KERNEL_DIR=${HOME}/android_kernel_xiaomi_msm8953
 KERN_IMG=$KERNEL_DIR/out/arch/arm64/boot/Image.gz-dtb
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 ZIP_DIR=$KERNEL_DIR/AnyKernel
-CONFIG=vince-perf_defconfig
+CONFIG=vince-krypton_defconfig
 CORES=$(grep -c ^processor /proc/cpuinfo)
 THREAD="-j$CORES"
 CROSS_COMPILE+="ccache "
@@ -81,11 +81,11 @@ function finerr() {
 			-d text="Job ${SEMAPHORE_JOB_NAME} throw an error(s)"
 }
 
+sendinfo
+
 make  O=out $CONFIG $THREAD
 make  O=out $THREAD
 
-BUILD_END=$(date +"%s")
-DIFF=$(($BUILD_END - $BUILD_START))
 
 if ! [ -a $KERN_IMG ]; then
 	echo -e "Kernel compilation failed, See buildlog to fix errors"
