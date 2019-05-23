@@ -79,23 +79,6 @@ function compile() {
 }
 # Zipping
 function zipping() {
-cd AnyKernel
-		make clean &>/dev/null
-		cd ..
-	
-		for MOD in $(find "${OUTDIR}" -name '*.ko') ; do
-			"${STRIP}" --strip-unneeded --strip-debug "${MOD}" &> /dev/null
-			"${SRCDIR}"/scripts/sign-file sha512 \
-					"${OUTDIR}/signing_key.priv" \
-					"${OUTDIR}/signing_key.x509" \
-					"${MOD}"
-			find "${OUTDIR}" -name '*.ko' -exec cp {} "${MODULEDIR}" \;
-			case ${MOD} in
-				*/wlan.ko)
-					cp -ar "${MOD}" "${PRONTO}"
-			esac
-		done
-
         cd AnyKernel
         zip -r9 KryPtoN-Kernel-${tanggal}.zip *
         cd ..
