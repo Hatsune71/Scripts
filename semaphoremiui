@@ -1,4 +1,4 @@
-#!bin/bash
+#!/usr/bin/env bash
 echo "Clone Toolchains"
 git clone -j32 https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-9.0.0_r34 gcc
 git clone -j32 https://github.com/Kry9toN/ak2-KryPtoN -b miui AnyKernel
@@ -30,6 +30,7 @@ export ARCH=arm64
 export SUBARCH=arm64
 export KBUILD_BUILD_USER=root
 export KBUILD_BUILD_HOST=KryPtoNProject
+export CROSS_COMPILE
 
 # sticker plox
 function sticker() {

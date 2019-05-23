@@ -1,4 +1,4 @@
-#!bin/bash
+#!/usr/bin/env bash
 IMAGE=$(pwd)/out/arch/arm64/boot/Image.gz-dtb
 echo "Clone Toolchains"
 git clone -j32 https://github.com/Kry9toN-project/aarch64-linux-gnu.git -b gcc10 gcc
