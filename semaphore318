@@ -7,7 +7,7 @@ echo "Done"
 token="715801700:AAEnlXgl0p8V5f8xHefHC2SLq8kio6VcS-c"
 chat_id="-1001348632957"
 GCC="$(pwd)/gcc/bin/aarch64-linux-gnu-"
-tanggal=$(date "+%Y%m%d-%H%M")
+tanggal=$(TZ=Asia/Jakarta date "+%Y%m%d-%H%M")
 START=$(date +"%s")
 export ARCH=arm64
 export KBUILD_BUILD_USER=root
