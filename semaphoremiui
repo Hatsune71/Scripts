@@ -105,7 +105,7 @@ OUTDIR="$PWD/out/"
 SRCDIR="$PWD/"
 MODULEDIR="$PWD/AnyKernel/modules/system/lib/modules/"
 PRONTO=${MODULEDIR}pronto/pronto_wlan.ko
-STRIP="$PWD/stock/bin/$(echo "$(find "$PWD/stock/bin" -type f -name "aarch64-*-gcc")" | awk -F '/' '{print $NF}' |\
+STRIP="$PWD/gcc/bin/$(echo "$(find "$PWD/gcc/bin" -type f -name "aarch64-*-gcc")" | awk -F '/' '{print $NF}' |\
 sed -e 's/gcc/strip/')"
 
 for MOD in $(find "${OUTDIR}" -name '*.ko') ; do
