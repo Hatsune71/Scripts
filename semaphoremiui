@@ -10,6 +10,11 @@ GCC="$(pwd)/gcc/bin/aarch64-linux-android-"
 tanggal=$(TZ=Asia/Jakarta date "+%Y%m%d-%H%M")
 START=$(date +"%s")
 
+# Install build package
+install-package --update-new ccache bc bash git-core gnupg build-essential \
+	zip curl make automake autogen autoconf autotools-dev libtool shtool python \
+	m4 gcc libtool zlib1g-dev
+
 # Modules environtment
 OUTDIR="$PWD/out/"
 SRCDIR="$PWD/"
@@ -79,13 +84,6 @@ function compile() {
 }
 # Zipping
 function zipping() {
-        cd AnyKernel
-        zip -r9 KryPtoN-Kernel-${tanggal}.zip *
-        cd ..
-}
-
-# Module
-function module() {
 		cd AnyKernel
 		make clean &>/dev/null
 		cd ..
@@ -102,7 +100,12 @@ function module() {
 					cp -ar "${MOD}" "${PRONTO}"
 			esac
 		done
+
+        cd AnyKernel
+        zip -r9 KryPtoN-Kernel-${tanggal}.zip *
+        cd ..
 }
+
 sendinfo
 compile
 zipping
