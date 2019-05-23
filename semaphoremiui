@@ -122,7 +122,6 @@ for MOD in $(find "${OUTDIR}" -name '*.ko') ; do
 	esac
 done
 
-cd $ZIP_DIR
 cp $KERN_IMG $ZIP_DIR/zImage
 make normal &>/dev/null
 echo KryPtoN*.zip
