@@ -23,7 +23,6 @@ CROSS_COMPILE+="$PWD/gcc/bin/aarch64-linux-android-"
 # Export
 export JOBS="$(grep -c '^processor' /proc/cpuinfo)"
 export ARCH=arm64
-export SUBARCH=arm64
 export KBUILD_BUILD_USER=root
 export KBUILD_BUILD_HOST=KryPtoNProject
 export CROSS_COMPILE
