@@ -91,6 +91,7 @@ make  O=out $THREAD
 if ! [ -a $KERN_IMG ]; then
 	echo -e "Kernel compilation failed, See buildlog to fix errors"
 	finerr
+	stickerr
 	exit 1
 fi
 
@@ -102,7 +103,7 @@ cd ..
 # Credit @adekmaulana
 OUTDIR="$PWD/out/"
 SRCDIR="$PWD/"
-MODULEDIR="$PWD/AnyKernel2/modules/system/lib/modules/"
+MODULEDIR="$PWD/AnyKernel/modules/system/lib/modules/"
 PRONTO=${MODULEDIR}pronto/pronto_wlan.ko
 STRIP="$PWD/stock/bin/$(echo "$(find "$PWD/stock/bin" -type f -name "aarch64-*-gcc")" | awk -F '/' '{print $NF}' |\
 sed -e 's/gcc/strip/')"
@@ -120,10 +121,9 @@ for MOD in $(find "${OUTDIR}" -name '*.ko') ; do
 	esac
 done
 
-cd $ZIP_DIR
-cp $KERN_IMG $ZIP_DIR/zImage
-make normal &>/dev/null
-echo KryPtoN-Kernel-${tanggal}.zip *
+        cd AnyKernel
+        zip -r9 KryPtoN-Kernel-${tanggal}.zip *
+        cd ..
 echo "Flashable zip generated under $ZIP_DIR."
 END=$(date +"%s")
 DIFF=$(($END - $START))
