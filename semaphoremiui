@@ -3,7 +3,6 @@ echo "Clone Toolchains"
 git clone -j32 https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-9.0.0_r34 gcc
 git clone -j32 https://github.com/Kry9toN/ak2-KryPtoN -b miui AnyKernel
 echo "Done"
-GCC="$(pwd)/gcc/bin/aarch64-linux-android-"
 token="715801700:AAEnlXgl0p8V5f8xHefHC2SLq8kio6VcS-c"
 chat_id="-1001348632957"
 tanggal=$(TZ=Asia/Jakarta date "+%Y%m%d-%H%M")
@@ -85,15 +84,19 @@ function finerr() {
 
 sendinfo
 
-        make -s -C $(pwd) O=out vince-krypton_defconfig
-        make -s -C $(pwd) CROSS_COMPILE=${GCC} O=out -j32 -l32 2>&1| tee build.log
-            if ! [ -a $IMAGE ]; then
-                finerr
-		stikerr
-                exit 1
-            fi
+make  O=out $CONFIG $THREAD
+make  O=out $THREAD
+
+
+if ! [ -a $KERN_IMG ]; then
+	echo -e "Kernel compilation failed, See buildlog to fix errors"
+	finerr
+	stickerr
+	exit 1
+fi
         cp out/arch/arm64/boot/Image.gz-dtb AnyKernel/zImage
         paste
+	cd ..
 
 # For MIUI Build
 # Credit @adekmaulana
