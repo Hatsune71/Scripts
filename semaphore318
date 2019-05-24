@@ -15,12 +15,17 @@ chat_id="-1001348632957"
 GCC="$(pwd)/gcc/bin/aarch64-linux-android-"
 tanggal=$(TZ=Asia/Jakarta date "+%Y%m%d-%H%M")
 START=$(date +"%s")
+CONFIG=vince-krypton_defconfig
+CORES=$(grep -c ^processor /proc/cpuinfo)
+THREAD="-j$CORES"
+CROSS_COMPILE+="ccache "
+CROSS_COMPILE+="$PWD/gcc/bin/aarch64-linux-android-"
+
 export ARCH=arm64
 export KBUILD_BUILD_USER=root
 export KBUILD_BUILD_HOST=KryPtoNProject
 export CROSS_COMPILE
-CROSS_COMPILE+="ccache "
-CROSS_COMPILE+="$PWD/gcc/bin/aarch64-linux-android-"
+
 # sticker plox
 function sticker() {
         curl -s -X POST "https://api.telegram.org/bot$token/sendSticker" \
@@ -67,8 +72,8 @@ function finerr() {
 }
 # Compile plox
 function compile() {
-        make $(pwd) O=out vince-krypton_defconfig -j32 -l32
-        make $(pwd) O=out -j32 -l32 2>&1| tee build.log
+        make $(pwd) O=out $CONFIG $THREAD
+        make $(pwd) O=out $THREAD
             if ! [ -a $IMAGE ]; then
                 finerr
 		stikerr
