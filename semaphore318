@@ -6,7 +6,7 @@ git clone -j32 https://github.com/Kry9toN/ak2-KryPtoN -b aosp AnyKernel
 echo "Done"
 token="715801700:AAEnlXgl0p8V5f8xHefHC2SLq8kio6VcS-c"
 chat_id="-1001348632957"
-GCC="$(pwd)/gcc/bin/aarch64-linux-gnu-"
+GCC="$(pwd)/gcc/bin/aarch64-linux-android-"
 tanggal=$(TZ=Asia/Jakarta date "+%Y%m%d-%H%M")
 START=$(date +"%s")
 export ARCH=arm64
