@@ -3,6 +3,12 @@ IMAGE=$(pwd)/out/arch/arm64/boot/Image.gz-dtb
 echo "Clone Toolchains"
 git clone -j32 https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-9.0.0_r34 gcc
 git clone -j32 https://github.com/Kry9toN/ak2-KryPtoN -b aosp AnyKernel
+
+# Install build package
+install-package --update-new ccache bc bash git-core gnupg build-essential \
+	zip curl make automake autogen autoconf autotools-dev libtool shtool python \
+	m4 gcc libtool zlib1g-dev
+
 echo "Done"
 token="715801700:AAEnlXgl0p8V5f8xHefHC2SLq8kio6VcS-c"
 chat_id="-1001348632957"
@@ -12,6 +18,7 @@ START=$(date +"%s")
 export ARCH=arm64
 export KBUILD_BUILD_USER=root
 export KBUILD_BUILD_HOST=KryPtoNProject
+CROSS_COMPILE+="ccache "
 # sticker plox
 function sticker() {
         curl -s -X POST "https://api.telegram.org/bot$token/sendSticker" \
