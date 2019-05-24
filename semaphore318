@@ -67,7 +67,7 @@ function finerr() {
 }
 # Compile plox
 function compile() {
-        make $(pwd) O=out vince-krypton_defconfig
+        make $(pwd) O=out vince-krypton_defconfig -j32 -l32
         make $(pwd) O=out -j32 -l32 2>&1| tee build.log
             if ! [ -a $IMAGE ]; then
                 finerr
