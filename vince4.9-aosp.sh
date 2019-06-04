@@ -23,8 +23,10 @@ CROSS_COMPILE+="$PWD/stock/bin/aarch64-linux-gnu-"
 #Telergam Variable
 KERNEL_NAME="KryPtoN"
 CODE="PWR"
-VERSION="v1.0"
-KVERSION="3.18.140"
+LINUX="UBUNTU 19.04"
+DEVICE="Xiaomi Redmi 5 Plus(Vince) AOSP"
+VERSION="v1.3"
+KVERSION="4.9.173"
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 BOT_API_KEY="715801700:AAEnlXgl0p8V5f8xHefHC2SLq8kio6VcS-c"
 CHAT_ID="-1001348632957"
@@ -33,6 +35,7 @@ COMPILE="$PWD/stock/bin/aarch64-linux-gnu-"
 COMP_VERSION=$(${COMPILE}gcc --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')
 
 #Telegram Function
+
                 function kirim() {
                          curl -F chat_id="$CHAT_ID" -F document=@"$ZIP_DIR/$ZIP_NAME" https://api.telegram.org/bot$BOT_API_KEY/sendDocument
                 }
@@ -96,9 +99,6 @@ while true; do
 	
 		echo -e "\n(i) Cloning toolcahins if folder not exist..."
 		git clone https://github.com/najahiiii/aarch64-linux-gnu.git -b gcc9-20190401 --depth=1 stock
-
-		echo -e "\n(i) Cloning clang if folder not exist..."
-		git lfs clone https://github.com/najahiiii/DragonTC.git -b 9.0 --depth=1 clang
 	
 		echo -e ""
 		make  O=out $CONFIG $THREAD &>/dev/null
@@ -181,16 +181,23 @@ while true; do
 	fi
 
         if [ "$choice" == "5" ]; then
+
+		kirim_info " *KryPtoN* Kernel New Build!
+*Started on:* ${LINUX}
+*Device:* ${DEVICE}
+*Kernel Version:* ${KVERSION}
+*Version:* ${VERSION}
+*At branch:* ${BRANCH}
+*Commit:* $(git log --pretty=format:'%h : %s' -1)
+*Compiler:* ${COMP_VERSION}
+*Strated on:* $(date) "
                 
                 echo -e " "
 		echo -e "\n(i) Cloning AnyKernel2 if folder not exist..."
 		git clone https://github.com/Kry9toN/ak2-KryPtoN
 	
 		echo -e "\n(i) Cloning toolcahins if folder not exist..."
-		git clone https://github.com/najahiiii/aarch64-linux-gnu.git -b linaro8-20190402 --depth=1 stock
-
-		echo -e "\n(i) Cloning clang if folder not exist..."
-		git lfs clone https://github.com/najahiiii/DragonTC.git -b 9.0 --depth=1 clang
+		git clone https://github.com/najahiiii/aarch64-linux-gnu.git -b gcc9-20190401 --depth=1 stock
 	
 		echo -e ""
 		make  O=out $CONFIG $THREAD &>/dev/null
@@ -259,14 +266,6 @@ while true; do
 		echo -e " "
                 echo -e "Send to Telegram" 
 
-		kirim_info "*KryPtoN* Kernel New Build!
-*Started on:* Kali GNU/Linux Rolling
-*Kernel Version:* ${KVERSION}
-*Version:* ${VERSION}
-*At branch:* ${BRANCH}
-*Commit:* $(git log --pretty=format:'%h : %s' -1)
-*Compiler:* ${COMP_VERSION}
-*Strated on:* $(date)  "
 		kirim
 		selesai
 		kirimsetiker
