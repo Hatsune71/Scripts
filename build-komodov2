@@ -20,9 +20,6 @@ function send() {
   curl -F chat_id="$CHAT_ID" -F document=@"$LOG" https://api.telegram.org/bot$BOT_API_KEY/sendDocument
  }
 
-export KOMODO_BUILD_TYPE=OFFICIAL
-export KOMODO_OFFICIAL=true
-
 #Main script
 while true; do
 	echo -e "\n[1] Build with cache"
