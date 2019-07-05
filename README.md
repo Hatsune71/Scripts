@@ -27,3 +27,10 @@ Sources For Xiaomi Redmi 5 Plus (Vince)
 
 * My Personal Scripts
 * Script base From [rama982](https://github.com/rama982), [Najahiii](https://github.com/najahiiii)
+
+```
+wget <link raw file> <name file>
+```
+```
+chmod +x <name file>
+```
