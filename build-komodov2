@@ -23,8 +23,10 @@ function send() {
 #Main script
 while true; do
 	echo -e "\n[1] Build with cache"
-	echo -e "[2] Clean"
-	echo -e "[3] Quit"
+	echo -e "[2] Build Kernel"
+	echo -e "[3] Build Apps"
+	echo -e "[4] Clean"
+	echo -e "[5] Quit"
 	echo -ne "\n(i) Please enter a choice[1-3]: "
 	
 	read choice
@@ -48,11 +50,47 @@ lunch "${ROM}"_"${DEVICE}"-userdebug
 fi
 
 if [ "$choice" == "2" ]; then
+	read -p "Enter your device : " DEVICE
+	
+		export CCACHE_DIR=./.ccache
+	export USE_CCACHE=1
+	export CCACHE_COMPRESS=1
+	prebuilts/misc/linux-x86/ccache/ccache -M 50G
+	
+	. build/envsetup.sh
+lunch "${ROM}"_"${DEVICE}"-userdebug
+	
+	
+		mka bootimage 2>&1 | tee "${CDIR}/out/build-${ROM}.log"
+		
+		send
+fi
+
+if [ "$choice" == "3" ]; then
+	read -p "Enter your device : " DEVICE
+	
+	read -p "Enter packname apps : " APPS
+	
+	export CCACHE_DIR=./.ccache
+	export USE_CCACHE=1
+	export CCACHE_COMPRESS=1
+	prebuilts/misc/linux-x86/ccache/ccache -M 50G
+	
+	. build/envsetup.sh
+lunch "${ROM}"_"${DEVICE}"-userdebug
+	
+	
+		make "{$APPS}" 2>&1 | tee "${CDIR}/out/build-${ROM}.log"
+		
+		send
+fi
+
+if [ "$choice" == "4" ]; then
 	make clean
 	make clobber
 fi
 
-if [ "$choice" == "3" ]; then
+if [ "$choice" == "5" ]; then
 		exit 
 fi
 
