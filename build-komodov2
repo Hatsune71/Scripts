@@ -52,7 +52,13 @@ fi
 if [ "$choice" == "2" ]; then
 	read -p "Enter your device : " DEVICE
 	
-		export CCACHE_DIR=./.ccache
+	KERNEL="${CDIR}/out/target/product/${DEVICE}/boot.img"
+	
+		function sendkernel() {
+  curl -F chat_id="$CHAT_ID" -F document=@"$KERNEL" https://api.telegram.org/bot$BOT_API_KEY/sendDocument
+ }
+ 
+	export CCACHE_DIR=./.ccache
 	export USE_CCACHE=1
 	export CCACHE_COMPRESS=1
 	prebuilts/misc/linux-x86/ccache/ccache -M 50G
@@ -64,13 +70,18 @@ lunch "${ROM}"_"${DEVICE}"-userdebug
 		mka bootimage 2>&1 | tee "${CDIR}/out/build-${ROM}.log"
 		
 		send
+		sendkernel
 fi
 
 if [ "$choice" == "3" ]; then
 	read -p "Enter your device : " DEVICE
 	
 	read -p "Enter packname apps : " APPS
+	APP="${CDIR}/out/target/product/${DEVICE}/system/priv-apps/${APPS}/${APPS}.apk"
 	
+	function sendapp() {
+  curl -F chat_id="$CHAT_ID" -F document=@"$APP" https://api.telegram.org/bot$BOT_API_KEY/sendDocument
+ }
 	export CCACHE_DIR=./.ccache
 	export USE_CCACHE=1
 	export CCACHE_COMPRESS=1
@@ -83,6 +94,7 @@ lunch "${ROM}"_"${DEVICE}"-userdebug
 		make "{$APPS}" 2>&1 | tee "${CDIR}/out/build-${ROM}.log"
 		
 		send
+		sendapp
 fi
 
 if [ "$choice" == "4" ]; then
