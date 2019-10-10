@@ -10,15 +10,24 @@
 ROM="komodo"
 CDIR="$PWD/${ROM}"
 LOG="${CDIR}/out/build-${ROM}.log"
-BOT_API_KEY=""
-CHAT_ID="-393505960"
+BOT_API_KEY=$(openssl enc -base64 -d <<< NzE1ODAxNzAwOkFBRW5sWGdsMHA4VjVmOHhIZWZIQzJTTHE4a2lvNlZjUy1jCg==)
+CHAT_ID="-1001443045211"
+FILE="${CDIR}/out/target/product/${DEVICE}/KomodoOS-*.zip"
 cd $CDIR
 
 #Fuction telegram
-
 function send() {
   curl -F chat_id="$CHAT_ID" -F document=@"$LOG" https://api.telegram.org/bot$BOT_API_KEY/sendDocument
- }
+}
+ 
+# Send info plox channel
+function sendinfo() {
+        curl -s -X POST "https://api.telegram.org/bot$token/sendMessage" \
+                        -d chat_id=$chat_id \
+                        -d "disable_web_page_preview=true" \
+                        -d "parse_mode=html" \
+                        -d text="<b>Komodo OS Rom</b> new build is up%0AFor device <b>"${DEVICE}"</b>%0AStarted on <code>$(TZ=Asia/Jakarta date)</code>"
+}
 
 #Main script
 while true; do
@@ -34,67 +43,72 @@ while true; do
 	if [ "$choice" == "1" ]; then
 	
 	read -p "Enter your device : " DEVICE
-	
+    sendinfo
 	export CCACHE_DIR=./.ccache
 	export USE_CCACHE=1
 	export CCACHE_COMPRESS=1
-	prebuilts/misc/linux-x86/ccache/ccache -M 50G
-	
 	. build/envsetup.sh
-lunch "${ROM}"_"${DEVICE}"-userdebug
-	
-	
-		mka bacon "${ROM}" 2>&1 | tee "${CDIR}/out/build-${ROM}.log"
-		
-		send
+    lunch "${ROM}"_"${DEVICE}"-userdebug
+
+	make "${ROM}" 2>&1 | tee "${CDIR}/out/build-${ROM}.log"
+    if ! [ -a $FILE ]; then
+        finerr
+        send
+		stikerr
+        exit 1
+	send
 fi
 
 if [ "$choice" == "2" ]; then
 	read -p "Enter your device : " DEVICE
-	
+
 	KERNEL="${CDIR}/out/target/product/${DEVICE}/boot.img"
-	
-		function sendkernel() {
+
+function sendkernel() {
   curl -F chat_id="$CHAT_ID" -F document=@"$KERNEL" https://api.telegram.org/bot$BOT_API_KEY/sendDocument
- }
- 
+}
+
 	export CCACHE_DIR=./.ccache
 	export USE_CCACHE=1
 	export CCACHE_COMPRESS=1
-	prebuilts/misc/linux-x86/ccache/ccache -M 50G
-	
+
 	. build/envsetup.sh
-lunch "${ROM}"_"${DEVICE}"-userdebug
-	
-	
-		mka bootimage 2>&1 | tee "${CDIR}/out/build-${ROM}.log"
-		
-		send
-		sendkernel
+    lunch "${ROM}"_"${DEVICE}"-userdebug
+
+	make bootimage 2>&1 | tee "${CDIR}/out/build-${ROM}.log"
+    if ! [ -a $KERNEL ]; then
+        finerr
+        send
+		stikerr
+        exit 1
+	send
+	sendkernel
 fi
 
 if [ "$choice" == "3" ]; then
 	read -p "Enter your device : " DEVICE
-	
+
 	read -p "Enter packname apps : " APPS
 	APP="${CDIR}/out/target/product/${DEVICE}/system/priv-apps/${APPS}/${APPS}.apk"
-	
-	function sendapp() {
+
+function sendapp() {
   curl -F chat_id="$CHAT_ID" -F document=@"$APP" https://api.telegram.org/bot$BOT_API_KEY/sendDocument
- }
+}
 	export CCACHE_DIR=./.ccache
 	export USE_CCACHE=1
 	export CCACHE_COMPRESS=1
-	prebuilts/misc/linux-x86/ccache/ccache -M 50G
-	
+
 	. build/envsetup.sh
-lunch "${ROM}"_"${DEVICE}"-userdebug
-	
-	
-		make "{$APPS}" 2>&1 | tee "${CDIR}/out/build-${ROM}.log"
-		
-		send
-		sendapp
+    lunch "${ROM}"_"${DEVICE}"-userdebug
+
+	make "{$APPS}" 2>&1 | tee "${CDIR}/out/build-${ROM}.log"
+    if ! [ -a $APP ]; then
+        finerr
+        send
+		stikerr
+        exit 1
+	send
+	sendapp
 fi
 
 if [ "$choice" == "4" ]; then
