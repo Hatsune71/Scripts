@@ -40,7 +40,7 @@ while true; do
 	
 	read choice
 	
-	if [ "$choice" == "1" ]; then
+if [ "$choice" == "1" ]; then
 	
 	read -p "Enter your device : " DEVICE
     sendinfo
@@ -56,6 +56,7 @@ while true; do
         send
 		stikerr
         exit 1
+    fi
 	send
 fi
 
@@ -83,6 +84,7 @@ function sendkernel() {
         exit 1
 	send
 	sendkernel
+	fi
 fi
 
 if [ "$choice" == "3" ]; then
@@ -109,6 +111,7 @@ function sendapp() {
         exit 1
 	send
 	sendapp
+	fi
 fi
 
 if [ "$choice" == "4" ]; then
