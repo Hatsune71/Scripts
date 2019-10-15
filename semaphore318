@@ -80,7 +80,7 @@ function compile() {
 # Zipping
 function zipping() {
         cd AnyKernel
-        zip -r9 KryPtoN-Kernel-${tanggal}.zip *
+        zip -r9 KryPtoN-AOSP3.18-${tanggal}.zip *
         cd ..
 }
 sendinfo
