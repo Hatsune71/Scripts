@@ -84,7 +84,7 @@ echo "Done"
 sendinfo
 
 make -s -C $(pwd) O=out vince-krypton_defconfig
-make -s -C $(pwd) CROSS_COMPILE=${GCC} O=out $THREAD -l32 2>&1| tee build.log
+make -s -C $(pwd) O=out $THREAD -l32 2>&1| tee build.log
 if ! [ -a $KERN_IMG ]; then
 	echo -e "Kernel compilation failed, See buildlog to fix errors"
 	finerr
