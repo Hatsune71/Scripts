@@ -60,7 +60,7 @@ function push() {
 
 # Function upload logs to my own TELEGRAM paste
 function paste() {
-        cat build.log | curl -F document=build.log "https://api.telegram.org/bot$token/sendDocument" \
+        cat build.log | curl -F document=@build.log "https://api.telegram.org/bot$token/sendDocument" \
 			-F chat_id="$chat_id" \
 			-F "disable_web_page_preview=true" \
 			-F "parse_mode=html" 
