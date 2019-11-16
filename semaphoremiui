@@ -16,6 +16,7 @@ BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 ZIP_DIR=$KERNEL_DIR/AnyKernel
 CORES=$(grep -c ^processor /proc/cpuinfo)
 THREAD="-j$CORES"
+CONFIG="vince-krypton_defconfig"
 CROSS_COMPILE+="ccache "
 CROSS_COMPILE+="$PWD/gcc/bin/aarch64-linux-android-"
 
@@ -83,8 +84,8 @@ echo "Done"
 
 sendinfo
 
-make -s -C $(pwd) O=out vince-krypton_defconfig
-make -s -C $(pwd) O=out $THREAD -l32 2>&1| tee build.log
+make  O=out $CONFIG $THREAD
+make  O=out $THREAD -l32 2>&1| tee build.log
 if ! [ -a $KERN_IMG ]; then
 	echo -e "Kernel compilation failed, See buildlog to fix errors"
 	finerr
