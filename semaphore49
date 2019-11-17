@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 IMAGE=$(pwd)/out/arch/arm64/boot/Image.gz-dtb
-echo "Clone Toolchains"
-git clone -j32 https://github.com/NusantaraDevs/clang -b dev/10.0 clang
-git clone -j32 https://github.com/najahiiii/aarch64-linux-gnu -b gcc9-20190401 gcc
+echo "Clone Anykernel"
 git clone -j32 https://github.com/Kry9toN/ak2-KryPtoN -b aosp AnyKernel
 echo "Done"
 token="715801700:AAEnlXgl0p8V5f8xHefHC2SLq8kio6VcS-c"
@@ -10,7 +8,7 @@ chat_id="-1001348632957"
 GCC="$(pwd)/gcc/bin/aarch64-linux-gnu-"
 tanggal=$(TZ=Asia/Jakarta date "+%Y%m%d-%H%M")
 START=$(date +"%s")
-export ARCH=arm64
+export LD_LIBRARY_PATH="/root/clang/bin/../lib:$PATH"xport ARCH=arm64
 export KBUILD_BUILD_USER=root
 export KBUILD_BUILD_HOST=KryPtoNProject
 # sticker plox
@@ -60,12 +58,13 @@ function finerr() {
 # Compile plox
 function compile() {
         make O=out ARCH=arm64 vince-krypton_defconfig
-        PATH="${PWD}/clang/bin:${PWD}/gcc/bin:${PATH}" \
+        PATH="/root/clang/bin:${PATH}" \
         make -j$(nproc --all) O=out \
                       ARCH=arm64 \
                       CC=clang \
                       CLANG_TRIPLE=aarch64-linux-gnu- \
-                      CROSS_COMPILE=aarch64-linux-android- | tee build.log
+                      CROSS_COMPILE=aarch64-linux-gnu- \
+                      CROSS_COMPILE_ARM32=arm-linux-gnueabi- | tee build.log
             if ! [ -a $IMAGE ]; then
                 finerr
 		stikerr
