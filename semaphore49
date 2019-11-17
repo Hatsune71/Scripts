@@ -65,7 +65,7 @@ function compile() {
                       ARCH=arm64 \
                       CC=clang \
                       CLANG_TRIPLE=aarch64-linux-gnu- \
-                      CROSS_COMPILE=aarch64-linux-android- | tee kernel.log
+                      CROSS_COMPILE=aarch64-linux-android- | tee build.log
             if ! [ -a $IMAGE ]; then
                 finerr
 		stikerr
