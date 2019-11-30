@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 IMAGE=$(pwd)/out/arch/arm64/boot/Image.gz-dtb
 echo "Clone Anykernel"
-git clone -j32 https://github.com/Kry9toN/ak2-KryPtoN -b aosp AnyKernel
+git clone -j32 https://github.com/Kry9toN/AnyKernel3 -b vince AnyKernel
 echo "Done"
 token="715801700:AAEnlXgl0p8V5f8xHefHC2SLq8kio6VcS-c"
 chat_id="-1001348632957"

@@ -2,7 +2,7 @@
 IMAGE=$(pwd)/out/arch/arm64/boot/Image.gz-dtb
 echo "Clone Toolchains"
 git clone -j32 https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-9.0.0_r34 gcc
-git clone -j32 https://github.com/Kry9toN/ak2-KryPtoN -b aosp AnyKernel
+git clone -j32 https://github.com/Kry9toN/AnyKernel3 vince AnyKernel
 
 # Install build package
 install-package --update-new ccache bc bash git-core gnupg build-essential \
