@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Copyright (C) 2019 @alanndz (Telegram and Github)
-# Copyright 2019 Kry9toN (Dhimas) 
+# Copyright 2019 Kry9toN (Dhimas)
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 # <build> <clean> <cache>
@@ -12,21 +12,36 @@ CDIR="$PWD/${ROM}"
 LOG="${CDIR}/out/build-${ROM}.log"
 BOT_API_KEY=$(openssl enc -base64 -d <<< NzE1ODAxNzAwOkFBRW5sWGdsMHA4VjVmOHhIZWZIQzJTTHE4a2lvNlZjUy1jCg==)
 CHAT_ID="-1001443045211"
-FILE="${CDIR}/out/target/product/${DEVICE}/KomodoOS-*.zip"
 cd $CDIR
 
 #Fuction telegram
 function send() {
   curl -F chat_id="$CHAT_ID" -F document=@"$LOG" https://api.telegram.org/bot$BOT_API_KEY/sendDocument
 }
- 
+
 # Send info plox channel
 function sendinfo() {
-        curl -s -X POST "https://api.telegram.org/bot$token/sendMessage" \
-                        -d chat_id=$chat_id \
+        curl -s -X POST "https://api.telegram.org/bot$BOT_API_KEY/sendMessage" \
+                        -d chat_id="$CHAT_ID" \
                         -d "disable_web_page_preview=true" \
                         -d "parse_mode=html" \
                         -d text="<b>Komodo OS Rom</b> new build is up%0AFor device <b>"${DEVICE}"</b>%0AStarted on <code>$(TZ=Asia/Jakarta date)</code>"
+}
+
+function finerr() {
+        curl -s -X POST "https://api.telegram.org/bot$BOT_API_KEY/sendMessage" \
+                        -d chat_id="$CHAT_ID" \
+                        -d "disable_web_page_preview=true" \
+                        -d "parse_mode=html" \
+                        -d text="Error Bjir"
+}
+
+function fin() {
+        curl -s -X POST "https://api.telegram.org/bot$BOT_API_KEY/sendMessage" \
+                        -d chat_id="$CHAT_ID" \
+                        -d "disable_web_page_preview=true" \
+                        -d "parse_mode=html" \
+                        -d text="Build Finnish%0ABuild took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s)."
 }
 
 #Main script
@@ -37,27 +52,32 @@ while true; do
 	echo -e "[4] Clean"
 	echo -e "[5] Quit"
 	echo -ne "\n(i) Please enter a choice[1-3]: "
-	
+
 	read choice
-	
+
 if [ "$choice" == "1" ]; then
-	
+
 	read -p "Enter your device : " DEVICE
-    sendinfo
+	START=$(date +"%s")
+	FILE="${CDIR}/out/target/product/${DEVICE}/Komodo*.zip"
+        sendinfo
 	export CCACHE_DIR=./.ccache
 	export USE_CCACHE=1
 	export CCACHE_COMPRESS=1
+	export TEMPORARY_DISABLE_PATH_RESTRICTIONS=true
 	. build/envsetup.sh
     lunch "${ROM}"_"${DEVICE}"-userdebug
 
-	make "${ROM}" 2>&1 | tee "${CDIR}/out/build-${ROM}.log"
+	mka bacon 2>&1 | tee "${CDIR}/out/build-${ROM}.log"
     if ! [ -a $FILE ]; then
         finerr
         send
-		stikerr
-        exit 1
+	exit 1
     fi
 	send
+	fin
+END=$(date +"%s")
+DIFF=$(($END - $START))
 fi
 
 if [ "$choice" == "2" ]; then
