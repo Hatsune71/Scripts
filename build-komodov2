@@ -78,6 +78,16 @@ END=$(date +"%s")
 DIFF=$(($END - $START))
 	send
 	fin
+
+while true; do
+    read -p "Upload on SF?" yn
+    case $yn in
+        [Yy]* ) sshpass -p 'password' scp ${FILE} kry9ton@frs.sourceforge.net:/home/frs/project/krypton-project/Test/; break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer y or n.";;
+    esac
+done
+
 fi
 
 if [ "$choice" == "2" ]; then
