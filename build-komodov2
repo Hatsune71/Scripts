@@ -41,7 +41,7 @@ function fin() {
                         -d chat_id="$CHAT_ID" \
                         -d "disable_web_page_preview=true" \
                         -d "parse_mode=html" \
-                        -d text="Build Finnish%0ABuild took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s)."
+                        -d text="Build took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s)."
 }
 
 #Main script
@@ -74,10 +74,10 @@ if [ "$choice" == "1" ]; then
         send
 	exit 1
     fi
-	send
-	fin
 END=$(date +"%s")
 DIFF=$(($END - $START))
+	send
+	fin
 fi
 
 if [ "$choice" == "2" ]; then
