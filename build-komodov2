@@ -110,7 +110,7 @@ clear
 while true; do
     read -p "So upload on SF ? " yn
     case $yn in
-        [Yy]* ) sshpass -p 'passwordssh' scp ${FILE} kry9ton@frs.sourceforge.net:/home/frs/project/krypton-project/Test/; break;;
+        [Yy]* ) sshpass -p 'passwordssh' scp ${FILE} hatsune@frs.sourceforge.net:/home/frs/project/hatsune-project/Testing/; break;;
         [Nn]* ) exit;;
         * ) echo "Please answer y or n.";;
     esac
